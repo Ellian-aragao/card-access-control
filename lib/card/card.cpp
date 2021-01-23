@@ -1,6 +1,8 @@
 #include "../../src/config.h"
 #include "card.h"
 
+extern byte eeprom[TAM_EEPROM];
+
 /////////////////////////////////////////  Access Granted    ///////////////////////////////////
 void granted(uint16_t setDelay)
 {
@@ -106,8 +108,8 @@ void readID(uint8_t number, byte storedCard[])
 {
   uint8_t start = (number * 4) + 2; // Figure out starting position
   for (uint8_t i = 0; i < 4; i++)
-  {                                         // Loop 4 times to get the 4 Bytes
-    storedCard[i] = EEPROM.read(start + i); // Assign values read from EEPROM to array
+  {                                    // Loop 4 times to get the 4 Bytes
+    storedCard[i] = eeprom[start + i]; // EEPROM.read(start + i); // Assign values read from EEPROM to array
   }
 }
 
@@ -115,14 +117,14 @@ void readID(uint8_t number, byte storedCard[])
 void writeID(byte storedCard[])
 {
   if (!findID(storedCard))
-  {                                  // Before we write to the EEPROM, check to see if we have seen this card before!
-    uint8_t num = EEPROM.read(0);    // Get the numer of used spaces, position 0 stores the number of ID cards
-    uint8_t start = (num * 4) + 6;   // Figure out where the next slot starts
-    num++;                           // Increment the counter by one
-    EEPROM.write(0, num);            // Write the new count to the counter
+  {                                // Before we write to the EEPROM, check to see if we have seen this card before!
+    uint8_t num = eeprom[0];       // EEPROM.read(0);    // Get the numer of used spaces, position 0 stores the number of ID cards
+    uint8_t start = (num * 4) + 6; // Figure out where the next slot starts
+    num++;                         // Increment the counter by one
+    eeprom[0] = num;               //EEPROM.write(0, num);            // Write the new count to the counter
     for (uint8_t j = 0; j < 4; j++)
-    {                                         // Loop 4 times
-      EEPROM.write(start + j, storedCard[j]); // Write the array values to EEPROM in the right position
+    {                                    // Loop 4 times
+      eeprom[start + j] = storedCard[j]; //EEPROM.write(start + j, storedCard[j]); // Write the array values to EEPROM in the right position
     }
     successWrite();
     Serial.println(F("Successfully added ID record to EEPROM"));
@@ -144,24 +146,24 @@ void deleteID(byte deleteCard[])
   }
   else
   {
-    uint8_t num = EEPROM.read(0); // Get the numer of used spaces, position 0 stores the number of ID cards
-    uint8_t slot;                 // Figure out the slot number of the card
-    uint8_t start;                // = ( num * 4 ) + 6; // Figure out where the next slot starts
-    uint8_t looping;              // The number of times the loop repeats
+    uint8_t num = eeprom[0]; //EEPROM.read(0); // Get the numer of used spaces, position 0 stores the number of ID cards
+    uint8_t slot;            // Figure out the slot number of the card
+    uint8_t start;           // = ( num * 4 ) + 6; // Figure out where the next slot starts
+    uint8_t looping;         // The number of times the loop repeats
     uint8_t j;
     // uint8_t count = EEPROM.read(0); // Read the first Byte of EEPROM that stores number of cards
     slot = findIDSLOT(deleteCard); // Figure out the slot number of the card to delete
     start = (slot * 4) + 2;
     looping = ((num - slot) * 4);
-    num--;                // Decrement the counter by one
-    EEPROM.write(0, num); // Write the new count to the counter
+    num--;           // Decrement the counter by one
+    eeprom[0] = num; //EEPROM.write(0, num); // Write the new count to the counter
     for (j = 0; j < looping; j++)
-    {                                                      // Loop the card shift times
-      EEPROM.write(start + j, EEPROM.read(start + 4 + j)); // Shift the array values to 4 places earlier in the EEPROM
+    {                                            // Loop the card shift times
+      eeprom[start + j] = eeprom[start + j + 4]; //EEPROM.write(start + j, EEPROM.read(start + 4 + j)); // Shift the array values to 4 places earlier in the EEPROM
     }
     for (uint8_t k = 0; k < 4; k++)
-    { // Shifting loop
-      EEPROM.write(start + j + k, 0);
+    {                            // Shifting loop
+      eeprom[start + j + k] = 0; //EEPROM.write(start + j + k, 0);
     }
     successDelete();
     Serial.println(F("Successfully removed ID record from EEPROM"));
@@ -185,12 +187,13 @@ bool checkTwo(byte a[], byte b[])
 uint8_t findIDSLOT(byte find[])
 {
   byte storedCard[4];
-  uint8_t count = EEPROM.read(0); // Read the first Byte of EEPROM that
+  uint8_t count = eeprom[0];
+  EEPROM.read(0); // Read the first Byte of EEPROM that
   for (uint8_t i = 1; i <= count; i++)
   {                        // Loop once for each EEPROM entry
     readID(i, storedCard); // Read an ID from EEPROM, it is stored in storedCard[4]
     if (checkTwo(find, storedCard))
-    { // Check to see if the storedCard read from EEPROM is the same as the find[] ID card passed
+    {           // Check to see if the storedCard read from EEPROM is the same as the find[] ID card passed
       return i; // The slot number of the card
     }
   }
@@ -201,7 +204,7 @@ uint8_t findIDSLOT(byte find[])
 bool findID(byte find[])
 {
   byte storedCard[4];
-  uint8_t count = EEPROM.read(0); // Read the first Byte of EEPROM that
+  uint8_t count = eeprom[0]; // EEPROM.read(0); // Read the first Byte of EEPROM that
   for (uint8_t i = 1; i < count; i++)
   {                        // Loop once for each EEPROM entry
     readID(i, storedCard); // Read an ID from EEPROM, it is stored in storedCard[4]

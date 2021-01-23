@@ -1,3 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #define COMMON_ANODE
 
 #ifdef COMMON_ANODE
@@ -19,3 +22,7 @@
 // Set MFRC522 Pins
 #define SS_PIN 10
 #define RST_PIN 9
+
+#define TAM_EEPROM 16
+
+#endif

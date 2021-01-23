@@ -87,6 +87,8 @@ byte storedCard[4]; // Stores an ID read from EEPROM
 byte readCard[4];   // Stores scanned ID read from RFID Module
 byte masterCard[4]; // Stores master card's ID read from EEPROM
 
+byte eeprom[TAM_EEPROM];
+
 // Create MFRC522 instance.
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
@@ -107,7 +109,7 @@ void setup()
   digitalWrite(blueLed, LED_OFF);  // Make sure led is off
 
   //Protocol Configuration
-  Serial.begin(9600); // Initialize serial communications with PC
+  Serial.begin(9600l); // Initialize serial communications with PC
   SPI.begin();        // MFRC522 Hardware uses SPI protocol
   mfrc522.PCD_Init(); // Initialize MFRC522 Hardware
 
@@ -117,51 +119,12 @@ void setup()
   Serial.println(F("Access Control Example v0.1")); // For debugging purposes
   ShowReaderDetails(&mfrc522);                      // Show details of PCD - MFRC522 Card Reader details
 
-  //Wipe Code - If the Button (wipeB) Pressed while setup run (powered on) it wipes EEPROM
-  if (digitalRead(wipeB) == LOW)
-  {                               // when button pressed pin should get low, button connected to ground
-    digitalWrite(redLed, LED_ON); // Red Led stays on to inform user we are going to wipe
-    Serial.println(F("Wipe Button Pressed"));
-    Serial.println(F("You have 10 seconds to Cancel"));
-    Serial.println(F("This will be remove all records and cannot be undone"));
-    bool buttonState = monitorWipeButton(10000); // Give user enough time to cancel operation
-    if (buttonState == true && digitalRead(wipeB) == LOW)
-    { // If button still be pressed, wipe EEPROM
-      Serial.println(F("Starting Wiping EEPROM"));
-      for (uint16_t x = 0; x < EEPROM.length(); x = x + 1)
-      { //Loop end of EEPROM address
-        if (EEPROM.read(x) == 0)
-        { // If EEPROM address 0
-          // do nothing, already clear, go to the next address in order to save time and reduce writes to EEPROM
-        }
-        else
-        {
-          EEPROM.write(x, 0); // if not write 0 to clear, it takes 3.3mS
-        }
-      }
-      Serial.println(F("EEPROM Successfully Wiped"));
-      digitalWrite(redLed, LED_OFF); // visualize a successful wipe
-      delay(200);
-      digitalWrite(redLed, LED_ON);
-      delay(200);
-      digitalWrite(redLed, LED_OFF);
-      delay(200);
-      digitalWrite(redLed, LED_ON);
-      delay(200);
-      digitalWrite(redLed, LED_OFF);
-    }
-    else
-    {
-      Serial.println(F("Wiping Cancelled")); // Show some feedback that the wipe button did not pressed for 15 seconds
-      digitalWrite(redLed, LED_OFF);
-    }
-  }
   // Check if master card defined, if not let user choose a master card
   // This also useful to just redefine the Master Card
   // You can keep other EEPROM records just write other than 143 to EEPROM address 1
   // EEPROM address 1 should hold magical number which is '143'
-  if (EEPROM.read(1) != 143)
-  {
+  // if (EEPROM.read(1) != 143)
+  // {
     Serial.println(F("No Master Card Defined"));
     Serial.println(F("Scan A PICC to Define as Master Card"));
     do
@@ -174,16 +137,16 @@ void setup()
     } while (!successRead); // Program will not go further while you not get a successful read
     for (uint8_t j = 0; j < 4; j++)
     {                                   // Loop 4 times
-      EEPROM.write(2 + j, readCard[j]); // Write scanned PICC's UID to EEPROM, start from address 3
+      eeprom[j + 2] = readCard[j]; // EEPROM.write(2 + j, readCard[j]); // Write scanned PICC's UID to EEPROM, start from address 3
     }
-    EEPROM.write(1, 143); // Write to EEPROM we defined Master Card.
+    eeprom[1] = 143; // EEPROM.write(1, 143); // Write to EEPROM we defined Master Card.
     Serial.println(F("Master Card Defined"));
-  }
+  // }
   Serial.println(F("-------------------"));
   Serial.println(F("Master Card's UID"));
   for (uint8_t i = 0; i < 4; i++)
   {                                     // Read Master Card's UID from EEPROM
-    masterCard[i] = EEPROM.read(2 + i); // Write it to masterCard
+    masterCard[i] = eeprom[i + 2]; //EEPROM.read(2 + i); // Write it to masterCard
     Serial.print(masterCard[i], HEX);
   }
   Serial.println("");
@@ -200,25 +163,25 @@ void loop()
   {
     successRead = getID(&mfrc522, readCard); // sets successRead to 1 when we get read from reader otherwise 0
     // When device is in use if wipe button pressed for 10 seconds initialize Master Card wiping
-    if (digitalRead(wipeB) == LOW)
-    { // Check if button is pressed
-      // Visualize normal operation is iterrupted by pressing wipe button Red is like more Warning to user
-      digitalWrite(redLed, LED_ON);    // Make sure led is off
-      digitalWrite(greenLed, LED_OFF); // Make sure led is off
-      digitalWrite(blueLed, LED_OFF);  // Make sure led is off
-      // Give some feedback
-      Serial.println(F("Wipe Button Pressed"));
-      Serial.println(F("Master Card will be Erased! in 10 seconds"));
-      bool buttonState = monitorWipeButton(10000); // Give user enough time to cancel operation
-      if (buttonState == true && digitalRead(wipeB) == LOW)
-      {                     // If button still be pressed, wipe EEPROM
-        EEPROM.write(1, 0); // Reset Magic Number.
-        Serial.println(F("Master Card Erased from device"));
-        Serial.println(F("Please reset to re-program Master Card"));
-        while (1);
-      }
-      Serial.println(F("Master Card Erase Cancelled"));
-    }
+    // if (digitalRead(wipeB) == LOW)
+    // { // Check if button is pressed
+    //   // Visualize normal operation is iterrupted by pressing wipe button Red is like more Warning to user
+    //   digitalWrite(redLed, LED_ON);    // Make sure led is off
+    //   digitalWrite(greenLed, LED_OFF); // Make sure led is off
+    //   digitalWrite(blueLed, LED_OFF);  // Make sure led is off
+    //   // Give some feedback
+    //   Serial.println(F("Wipe Button Pressed"));
+    //   Serial.println(F("Master Card will be Erased! in 10 seconds"));
+    //   bool buttonState = monitorWipeButton(10000); // Give user enough time to cancel operation
+    //   if (buttonState == true && digitalRead(wipeB) == LOW)
+    //   {                     // If button still be pressed, wipe EEPROM
+    //     EEPROM.write(1, 0); // Reset Magic Number.
+    //     Serial.println(F("Master Card Erased from device"));
+    //     Serial.println(F("Please reset to re-program Master Card"));
+    //     while (1);
+    //   }
+    //   Serial.println(F("Master Card Erase Cancelled"));
+    // }
     if (programMode)
     {
       cycleLeds(); // Program Mode cycles through Red Green Blue waiting to read a new card
@@ -257,7 +220,7 @@ void loop()
   { // If scanned card's ID matches Master Card's ID - enter program mode
     programMode = true;
     Serial.println(F("Hello Master - Entered Program Mode"));
-    uint8_t count = EEPROM.read(0); // Read the first Byte of EEPROM that
+    uint8_t count = eeprom[0]; // EEPROM[0]; // EEPROM.read(0); // Read the first Byte of EEPROM that
     Serial.print(F("I have "));     // stores the number of ID's in EEPROM
     Serial.print(count);
     Serial.print(F(" record(s) on EEPROM"));
