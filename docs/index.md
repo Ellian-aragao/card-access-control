@@ -2,7 +2,7 @@
 O sistema desenvolvido tem como objetivo fazer o controle de autenticação via cartão magnético.
 
 ## Fluxo de funcionamento
-![flowchat](https://github.com/Ellian-aragao/card_access_control/blob/main/docs/flowchat.png)
+![flowchat](https://github.com/Ellian-aragao/card_access_control/blob/main/docs/flowchat.png?raw=true)
 
 ## Funcionalidades
 - [X] Cadastro de TAG mestre
