@@ -33,65 +33,65 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
 #### Mapeamento sensor RFID para cada microcontroladores Arduino
 
 <table>
-        <thead>
-          <tr>
-            <th>Signal</th>
-            <th>MFRC522 Reader/PCD</th>
-            <th>Uno/101</th>
-            <th>Mega</th>
-            <th>Nano V3</th>
-            <th>Leonardo/Micro</th>
-            <th>Pro Micro</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>RST/Reset</td>
-            <td>RST</td>
-            <td>9</td>
-            <td>5</td>
-            <td>D9</td>
-            <td>RESET/ICSP-5</td>
-            <td>RST</td>
-          </tr>
-          <tr>
-            <td>SPI SS</td>
-            <td>SDA(SS)</td>
-            <td>10</td>
-            <td>53</td>
-            <td>D10</td>
-            <td>10</td>
-            <td>10</td>
-          </tr>
-          <tr>
-            <td>SPI MOSI</td>
-            <td>MOSI</td>
-            <td>11 / ICSP-4</td>
-            <td>51</td>
-            <td>D11</td>
-            <td>ICSP-4</td>
-            <td>16</td>
-          </tr>
-          <tr>
-            <td>SPI MISO</td>
-            <td>MISO</td>
-            <td>12 / ICSP-1</td>
-            <td>50</td>
-            <td>D12</td>
-            <td>ICSP-1</td>
-            <td>14</td>
-          </tr>
-          <tr>
-            <td>SPI SCK</td>
-            <td>SCK</td>
-            <td>13 / ICSP-3</td>
-            <td>52</td>
-            <td>D13</td>
-            <td>ICSP-3</td>
-            <td>15</td>
-          </tr>
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th>Signal</th>
+      <th>MFRC522 Reader/PCD</th>
+      <th>Uno/101</th>
+      <th>Mega</th>
+      <th>Nano V3</th>
+      <th>Leonardo/Micro</th>
+      <th>Pro Micro</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RST/Reset</td>
+      <td>RST</td>
+      <td>9</td>
+      <td>5</td>
+      <td>D9</td>
+      <td>RESET/ICSP-5</td>
+      <td>RST</td>
+    </tr>
+    <tr>
+      <td>SPI SS</td>
+      <td>SDA(SS)</td>
+      <td>10</td>
+      <td>53</td>
+      <td>D10</td>
+      <td>10</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>SPI MOSI</td>
+      <td>MOSI</td>
+      <td>11 / ICSP-4</td>
+      <td>51</td>
+      <td>D11</td>
+      <td>ICSP-4</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <td>SPI MISO</td>
+      <td>MISO</td>
+      <td>12 / ICSP-1</td>
+      <td>50</td>
+      <td>D12</td>
+      <td>ICSP-1</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <td>SPI SCK</td>
+      <td>SCK</td>
+      <td>13 / ICSP-3</td>
+      <td>52</td>
+      <td>D13</td>
+      <td>ICSP-3</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Programas
 * [ArduinoIDE](https://www.arduino.cc/en/software)
@@ -110,7 +110,7 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
   * SoftwarSerial 1.0
 
 ## Como rodar a aplicação
-Levando conta que tudo ocorreu como os conformes nos [Pré-requisitos](#Pré-requisitos), temos então o ambiente do Vscode, nele existe os botões na barra inferior que fazem o upload do programa para o microcontrolador, executado este, abrimos o serial monitor para receber as mensagens do arduino, assim inicia-se o [fluxo](#Fluxo de funcionamento) da aplicação com sucesso.
+Levando conta que tudo ocorreu como os conformes nos [Pré-requisitos](##Pré-requisitos para rodar projeto), temos então o ambiente do Vscode, nele existe os botões na barra inferior que fazem o upload do programa para o microcontrolador, executado este, abrimos o serial monitor para receber as mensagens do arduino, assim inicia-se o [fluxo](##Fluxo de funcionamento) da aplicação com sucesso.
 > Nota-se que não é necessário a observação pelo serial monitor, os leds indicam o estado da aplicação.
 
 ### PlataformIO CLI
