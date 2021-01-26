@@ -17,11 +17,11 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
 - [ ] API para banco de dados externo
 
 ## Infraestrutura
-**Plataforma:** Atmel AVR 3.1.0
-**Placa:** uno
-**Framework:** Arduino
+* **Plataforma:** Atmel AVR 3.1.0
+* **Placa:** uno
+* **Framework:** Arduino
 
-## Pré-requisitos
+## Pré-requisitos para rodar projeto
 ### Eletrônicos
 * Arduino uno
 * Sensor RFID522
@@ -31,7 +31,6 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
 * 12 jumpers
 
 #### Mapeamento sensor RFID para cada microcontroladores Arduino
-
 
 <table>
         <thead>
@@ -96,14 +95,14 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
 
 ### Programas
 * [ArduinoIDE](https://www.arduino.cc/en/software)
-* Java 8 (Dependência arduinoIDE)
-* [Vscode](https://code.visualstudio.com/)
+* [Java 8](https://adoptopenjdk.net/) (Dependência arduinoIDE)
 * [PlataformIO](https://platformio.org)
+* [Vscode](https://code.visualstudio.com/)
 > a preferência pelo Vscode vem de sua integração com a plataformaIO que agiliza o processo de desenvolvimento sem dependẽncia do CLI
 
 ### Bibliotecas
-* [MFRC522](https://github.com/miguelbalboa/rfid?utm_source=platformio&utm_medium=piohome) 1.4.7
-* Framework Arduino AVR (Dependências)
+* [MFRC522 1.4.7](https://github.com/miguelbalboa/rfid?utm_source=platformio&utm_medium=piohome)
+* Framework Arduino AVR (Dependências puxadas pelo PlataformIO)
   * HID 1.0
   * SPI 1.0
   * Wire 1.0
@@ -111,8 +110,16 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
   * SoftwarSerial 1.0
 
 ## Como rodar a aplicação
-Levando conta que tudo ocorreu como os conformes nos [Pré-requisitos](Pré-requisitos), temos então o ambiente do Vscode, nele existe os botões na barra inferior que fazem o upload do programa para o microcontrolador, executado este, abrimos o serial monitor para receber as mensagens do arduino, assim inicia-se o [fluxo](Fluxo de funcionamento) da aplicação com sucesso.
+Levando conta que tudo ocorreu como os conformes nos [Pré-requisitos](#Pré-requisitos), temos então o ambiente do Vscode, nele existe os botões na barra inferior que fazem o upload do programa para o microcontrolador, executado este, abrimos o serial monitor para receber as mensagens do arduino, assim inicia-se o [fluxo](#Fluxo de funcionamento) da aplicação com sucesso.
 > Nota-se que não é necessário a observação pelo serial monitor, os leds indicam o estado da aplicação.
+
+### PlataformIO CLI
+Supondo que não deseje utilizar Vscode, através do CLI, basta rodar o comando:
+```shell
+pio run --target upload
+```
+
+Em caso de dúvidas, acessar a documentação oficial [PlataformIO](https://docs.platformio.org/en/latest/core/quickstart.html).
 
 ## Licença: The Unlicense
 This is free and unencumbered software released into the public domain.
@@ -139,5 +146,3 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to <http://unlicense.org/>
-
-
