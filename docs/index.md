@@ -110,11 +110,12 @@ O sistema desenvolvido tem como objetivo fazer o controle de autenticação via 
   * SoftwarSerial 1.0
 
 ## Como rodar a aplicação
-Levando conta que tudo ocorreu como os conformes nos [Pré-requisitos](##Pré-requisitos para rodar projeto), temos então o ambiente do Vscode, nele existe os botões na barra inferior que fazem o upload do programa para o microcontrolador, executado este, abrimos o serial monitor para receber as mensagens do arduino, assim inicia-se o [fluxo](##Fluxo de funcionamento) da aplicação com sucesso.
+Levando conta que tudo ocorreu como os conformes nos Pré-requisitos, temos então o ambiente do Vscode, nele existe os botões na barra inferior que fazem o upload do programa para o microcontrolador, executado este, abrimos o serial monitor para receber as mensagens do arduino, assim inicia-se o fluxo da aplicação com sucesso.
 > Nota-se que não é necessário a observação pelo serial monitor, os leds indicam o estado da aplicação.
 
 ### PlataformIO CLI
 Supondo que não deseje utilizar Vscode, através do CLI, basta rodar o comando:
+
 ```shell
 pio run --target upload
 ```
